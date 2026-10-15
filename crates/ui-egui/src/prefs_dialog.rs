@@ -229,6 +229,9 @@ fn category_fields(ui: &mut egui::Ui, d: &mut Dialog, cat: &str) {
     let t = Tokens::get(ui.ctx());
     let mut section = "";
     let mut first = true;
+    // Copy Mode's raster PNG is the clipboard's only payload: the On Copy vector options below
+    // don't apply then (a mixed clipboard could hand another app the SVG and lose the image).
+    let raster = d.str("copyMode") == "raster";
     let specs: Vec<_> = PREF_SPECS.iter().filter(|s| s.category == cat).collect();
     for (key, c, label) in UI_FIELDS {
         if *c == cat && cat != "Smart Guides" {
@@ -270,6 +273,10 @@ fn category_fields(ui: &mut egui::Ui, d: &mut Dialog, cat: &str) {
                     ui.label(egui::RichText::new(tl!("Applies the next time VectorCraft starts.")).color(t.text_dim).size(11.0));
                 }
             }
+            // On Copy's vector options don't apply while Copy Mode is the raster PNG.
+            PrefKind::Bool if raster && matches!(sp.key, "copyAsSvg" | "copyAsPdf" | "copyAicb") => {
+                ui.add_enabled_ui(false, |ui| bool_row(ui, d, sp.key, sp.label));
+            }
             PrefKind::Bool => bool_row(ui, d, sp.key, sp.label),
             PrefKind::Num { min, max, unit } => {
                 labeled(ui, sp.label, |ui| {
@@ -294,6 +301,17 @@ fn category_fields(ui: &mut egui::Ui, d: &mut Dialog, cat: &str) {
                     }
                 });
             }
+            // PNG Scale only applies to the raster PNG.
+            PrefKind::Int { min, max } if sp.key == "copyRasterScale" => {
+                ui.add_enabled_ui(raster, |ui| {
+                    labeled(ui, sp.label, |ui| {
+                        let x = v.as_i64().unwrap_or(min);
+                        if let Some(x) = widgets::range_field(ui, sp.key, x as f64, min as f64..=max as f64, "", 0, 110.0).map(|x| x as i64) {
+                            d.fields.insert(sp.key.into(), json!(x));
+                        }
+                    });
+                });
+            }
             PrefKind::Int { min, max } => {
                 labeled(ui, sp.label, |ui| {
                     let mut x = v.as_i64().unwrap_or(min);
@@ -310,17 +328,27 @@ fn category_fields(ui: &mut egui::Ui, d: &mut Dialog, cat: &str) {
             // Linux only: the other platforms have a single display server.
             PrefKind::Choice(_) if sp.key == "linuxDisplayServer" && !cfg!(target_os = "linux") => {}
             PrefKind::Choice(opts) => {
-                labeled(ui, sp.label, |ui| {
-                    let cur = v.as_str().unwrap_or("");
-                    let cur_label = opts.iter().find(|o| o.0 == cur).map(|o| o.1).unwrap_or(cur);
-                    let labels: Vec<&str> = opts.iter().map(|o| o.1).collect();
-                    if let Some(i) = widgets::dropdown(ui, sp.key, cur_label, &labels, 260.0) {
-                        d.fields.insert(sp.key.into(), json!(opts[i].0));
-                    }
+                // The legacy vector clipboard's mode only applies to the vector copy.
+                ui.add_enabled_ui(sp.key != "aicbMode" || !raster, |ui| {
+                    labeled(ui, sp.label, |ui| {
+                        let cur = v.as_str().unwrap_or("");
+                        let cur_label = opts.iter().find(|o| o.0 == cur).map(|o| o.1).unwrap_or(cur);
+                        let labels: Vec<&str> = opts.iter().map(|o| o.1).collect();
+                        if let Some(i) = widgets::dropdown(ui, sp.key, cur_label, &labels, 260.0) {
+                            d.fields.insert(sp.key.into(), json!(opts[i].0));
+                        }
+                    });
                 });
                 if sp.key == "gpuPreference" || sp.key == "linuxDisplayServer" {
                     // The window's graphics device and display server are chosen once, when the app starts.
                     ui.label(egui::RichText::new(tl!("Applies the next time VectorCraft starts.")).color(t.text_dim).size(11.0));
+                }
+                if sp.key == "copyMode" && raster {
+                    ui.label(
+                        egui::RichText::new(tl!("Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply."))
+                            .color(t.text_dim)
+                            .size(11.0),
+                    );
                 }
             }
             PrefKind::Color => {

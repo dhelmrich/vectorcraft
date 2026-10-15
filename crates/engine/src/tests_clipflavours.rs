@@ -202,6 +202,46 @@ fn copy_offers_flavours_by_the_preferences() {
     assert_eq!((f[0].data.as_slice(), f[1].mime), (b"Words".as_slice(), SVG));
 }
 
+#[test]
+fn copy_mode_rasterizes_at_the_chosen_scale_and_leaves_svg_alone() {
+    let mut s = session();
+    copy_red_square(&mut s);
+    let mimes = |s: &Session| s.clipboard_flavours().iter().map(|f| f.mime).collect::<Vec<_>>();
+    assert_eq!(mimes(&s), [TEXT, SVG, PNG], "SVG mode is the present behaviour");
+    run(&mut s, "prefs.set", json!({"key": "copyMode", "value": "raster"}));
+    run(&mut s, "prefs.set", json!({"key": "copyRasterScale", "value": 2}));
+    assert_eq!(mimes(&s), [PNG], "raster mode offers only the PNG");
+    let img = image::load_from_memory(&s.clipboard_flavours()[0].data).unwrap().to_rgba8();
+    assert_eq!(img.dimensions(), (80, 80), "40 pt at 2x");
+    assert_eq!(img.get_pixel(40, 40).0, [255, 0, 0, 255]);
+    run(&mut s, "prefs.set", json!({"key": "copyRasterScale", "value": 3}));
+    assert_eq!(image::load_from_memory(&s.clipboard_flavours()[0].data).unwrap().to_rgba8().dimensions(), (120, 120));
+    // The On Copy vector options don't apply in raster mode (a mixed clipboard could lose the image).
+    run(&mut s, "prefs.set", json!({"values": {"copyAsSvg": true, "copyAsPdf": true, "copyAicb": true}}));
+    assert_eq!(mimes(&s), [PNG]);
+    // SVG is resolution independent: the scale never touches it.
+    run(&mut s, "prefs.set", json!({"key": "copyMode", "value": "svg"}));
+    let svg = s.clipboard_flavours().iter().find(|f| f.mime == SVG).unwrap().data.clone();
+    run(&mut s, "prefs.set", json!({"key": "copyRasterScale", "value": 1}));
+    assert_eq!(svg, s.clipboard_flavours().iter().find(|f| f.mime == SVG).unwrap().data);
+    assert!(s.execute("prefs.set", &json!({"key": "copyMode", "value": "png4x"})).is_err());
+    assert!(s.execute("prefs.set", &json!({"key": "copyRasterScale", "value": 4})).is_err());
+    assert!(s.execute("prefs.set", &json!({"key": "copyRasterScale", "value": 0})).is_err());
+}
+
+#[test]
+fn an_over_large_copy_mode_raster_reports_its_size_and_copies_nothing() {
+    let mut s = session();
+    let id = run(&mut s, "shape.rectangle", json!({"x": 0, "y": 0, "width": 20000, "height": 20000}))["id"].clone();
+    run(&mut s, "select.set", json!({"ids": [id]}));
+    run(&mut s, "edit.copy", json!({}));
+    assert!(s.clipboard_raster_error().is_none(), "SVG mode has no raster scale");
+    run(&mut s, "prefs.set", json!({"values": {"copyMode": "raster", "copyRasterScale": 3}}));
+    let e = s.clipboard_raster_error().expect("60000 px a side exceeds the raster limits");
+    assert!(e.contains("pixels"), "{e}");
+    assert!(s.clipboard_flavours().is_empty(), "never copied smaller than asked");
+}
+
 /// The Type tool pastes the text it copied with its formatting, unless pasted text is kept plain.
 fn paste_copied_range(plain: bool) -> f64 {
     let mut s = session();

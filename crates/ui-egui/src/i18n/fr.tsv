@@ -1341,6 +1341,10 @@
 	Include Metadata	Inclure les métadonnées
 	Include non-printing layers	Inclure les calques non imprimables
 	Include SVG Code	Inclure le code SVG
+	Copy Mode	Mode de copie
+	PNG (Raster)	PNG (Pixels)
+	PNG Scale (raster; px per point)	Échelle PNG (pixels par point)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Copie uniquement le PNG : Inclure le code SVG, PDF et le presse-papiers vectoriel hérité ne s'appliquent pas.
 	Include Swatches for Tints	Inclure les nuances des teintes
 	Inflate…	Gonfler…
 	Info	Informations

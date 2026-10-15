@@ -1605,6 +1605,10 @@
 	Include Linked Files	링크된 파일 포함
 	Include Metadata	메타데이터 포함
 	Include SVG Code	SVG 코드 포함
+	Copy Mode	복사 모드
+	PNG (Raster)	PNG(래스터)
+	PNG Scale (raster; px per point)	PNG 배율(래스터, px/pt)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	PNG만 복사합니다. SVG 코드 포함, PDF, 레거시 벡터 클립보드는 적용되지 않습니다.
 	Include Swatches for Tints	농도별 견본 포함
 	Include non-printing layers	인쇄되지 않는 레이어 포함
 	Ink	잉크

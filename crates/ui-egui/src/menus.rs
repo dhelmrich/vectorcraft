@@ -198,6 +198,12 @@ pub const UI_COMMANDS: &[(&str, &str, &str, &str)] = &[
         "",
         "{} toggle General › Use Precise Cursors: the drawing tools' pointers become a crosshair → true when on",
     ),
+    (
+        "edit.copyMode",
+        "Copy Mode",
+        "",
+        "{mode: svg|raster, scale?: 1|2|3} set Clipboard Handling › On Copy › Copy Mode: Copy offers the SVG flavours (scale unused) or a PNG at `scale` pixels per point (`prefs.set` copyMode/copyRasterScale)",
+    ),
     ("view.textThreads", "Hide Text Threads", "Cmd+Shift+Y", "{} toggle the thread lines between threaded text frames"),
     ("view.gradientAnnotator", "Hide Gradient Annotator", "Cmd+Alt+G", "{} toggle the Gradient tool's annotator"),
     ("type.hiddenCharacters", "Show Hidden Characters", "Cmd+Alt+I", "{} toggle markers for spaces, paragraph ends and story ends"),
@@ -1080,6 +1086,17 @@ pub fn run_ui_command(app: &mut VectorcraftApp, id: &str, p: &Value) -> Option<R
                 json!(on)
             })
         }
+        "edit.copyMode" => {
+            let mode = s("mode").unwrap_or_default();
+            let mut values = json!({ "copyMode": mode });
+            if mode == "raster" {
+                values["copyRasterScale"] = json!(p.get("scale").and_then(Value::as_i64).unwrap_or(1));
+            }
+            app.run("prefs.set", json!({"values": values})).map(|_| {
+                crate::prefs_dialog::snapshot(app);
+                json!(mode)
+            })
+        }
         "view.textThreads" => flag(&mut app.ui.view.text_threads),
         "type.hiddenCharacters" => flag(&mut app.ui.view.hidden_chars),
         "type.bold" => crate::panels::character::toggle_face(app, Face::Bold),
@@ -1589,6 +1606,15 @@ pub fn checked(app: &VectorcraftApp, id: &str, p: &Value) -> Option<bool> {
         // The ruler context menu lists the document units, the current one checked.
         "document.setUnits" => {
             p.get("units").and_then(Value::as_str).and_then(vectorcraft_engine::doc::Unit::named) == Some(app.session.general_unit())
+        }
+        // Copy Mode: the four items map onto two preferences.
+        "edit.copyMode" => {
+            if p.get("mode").and_then(Value::as_str) == Some("raster") {
+                app.session.prefs.copy_mode == "raster"
+                    && p.get("scale").and_then(Value::as_u64) == Some(u64::from(app.session.prefs.copy_raster_scale))
+            } else {
+                app.session.prefs.copy_mode == "svg"
+            }
         }
         _ => return None,
     })
@@ -2151,6 +2177,15 @@ pub fn menu_tree_named(english_names: bool) -> Vec<(&'static str, Vec<Item>)> {
                 c("Paste in Place", "edit.pasteInPlace"),
                 c("Paste on All Artboards", "edit.pasteOnAllArtboards"),
                 c("Paste without Formatting", "edit.pasteWithoutFormatting"),
+                sub(
+                    "Copy Mode",
+                    vec![
+                        cp("SVG", "edit.copyMode", json!({"mode": "svg"})),
+                        cp("PNG 1×", "edit.copyMode", json!({"mode": "raster", "scale": 1})),
+                        cp("PNG 2×", "edit.copyMode", json!({"mode": "raster", "scale": 2})),
+                        cp("PNG 3×", "edit.copyMode", json!({"mode": "raster", "scale": 3})),
+                    ],
+                ),
                 c("Clear", "edit.clear"),
                 Sep,
                 cp("Find and Replace…", "edit.findReplace", json!({"find": "", "replace": "", "matchCase": false, "wholeWord": false})),
@@ -4031,6 +4066,22 @@ mod tests {
         assert!(UI_COMMANDS.iter().any(|c| c.0 == "view.preciseCursors" && c.2.is_empty()), "assignable, no default key");
         assert_eq!(app.run("view.preciseCursors", json!({})).unwrap(), json!(false));
         assert!(!app.session.prefs.use_precise_cursors);
+    }
+
+    /// Edit › Copy Mode sets the two Clipboard Handling preferences and ticks the right radio.
+    #[test]
+    fn copy_mode_command_sets_the_preferences_and_checks_the_radio() {
+        let mut app = VectorcraftApp::new(vectorcraft_engine::Session::new(), crate::Services::default());
+        assert_eq!(app.session.prefs.copy_mode, "svg");
+        assert_eq!(app.run("edit.copyMode", json!({"mode": "raster", "scale": 2})).unwrap(), json!("raster"));
+        assert_eq!((app.session.prefs.copy_mode.as_str(), app.session.prefs.copy_raster_scale), ("raster", 2));
+        assert_eq!(checked(&app, "edit.copyMode", &json!({"mode": "raster", "scale": 2})), Some(true));
+        assert_eq!(checked(&app, "edit.copyMode", &json!({"mode": "raster", "scale": 1})), Some(false));
+        assert_eq!(checked(&app, "edit.copyMode", &json!({"mode": "svg"})), Some(false));
+        app.run("edit.copyMode", json!({"mode": "svg"})).unwrap();
+        assert_eq!(app.session.prefs.copy_mode, "svg");
+        assert_eq!(checked(&app, "edit.copyMode", &json!({"mode": "svg"})), Some(true));
+        assert!(app.run("edit.copyMode", json!({"mode": "nope"})).is_err());
     }
 
     /// The command is listed in Edit › Keyboard Shortcuts without a key and takes one the user types; with the

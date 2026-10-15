@@ -460,6 +460,11 @@ const KEEPS_MENU_NAMES: [&str; 13] = ["cs", "de", "es", "fr", "hu", "it", "ja", 
 const MENU_KEEP_AS_IS: &[&str] = &[
     "VectorCraft",
     "OpenType",
+    // Copy Mode's formats and scales.
+    "SVG",
+    "PNG 1×",
+    "PNG 2×",
+    "PNG 3×",
     "Essentials",
     "Essentials Classic",
     "Automation",

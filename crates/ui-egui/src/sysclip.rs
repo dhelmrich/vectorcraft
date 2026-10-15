@@ -52,6 +52,13 @@ pub(crate) fn import_command(f: &Flavour, center: Option<[f64; 2]>) -> (&'static
 impl VectorcraftApp {
     /// After Copy or Cut: offer the copied objects to other apps.
     pub(crate) fn publish_clipboard(&mut self) {
+        // Copy Mode raster: the mode's scale is the user's choice, so a PNG too large to make is
+        // told, not silently copied smaller.
+        if let Some(e) = self.session.clipboard_raster_error() {
+            self.ui.status = e.clone();
+            crate::dialogs::confirm::tell(self, tl!("Copy Mode"), &e);
+            return;
+        }
         match self.services.system_clipboard.as_mut() {
             Some(cb) => {
                 if let Err(e) = cb.write(&self.session.clipboard_flavours()) {

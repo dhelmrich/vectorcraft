@@ -1287,6 +1287,14 @@
 	Include Metadata	包含元数据
 	Include non-printing layers	包含非打印图层
 	Include SVG Code	包含 SVG 代码
+	Copy Mode	复制模式
+	SVG	SVG
+	PNG 1×	PNG 1×
+	PNG 2×	PNG 2×
+	PNG 3×	PNG 3×
+	PNG (Raster)	PNG（栅格）
+	PNG Scale (raster; px per point)	PNG 缩放（栅格；像素/点）
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	仅复制 PNG：包含 SVG 代码、PDF 和旧版矢量剪贴板不适用。
 	Include Swatches for Tints	包含淡色色板
 	Inflate…	膨胀…
 	Info	信息

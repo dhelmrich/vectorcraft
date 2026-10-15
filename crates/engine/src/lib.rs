@@ -763,6 +763,11 @@ pub struct Prefs {
     // Clipboard Handling
     pub copy_as_svg: bool,
     pub copy_as_pdf: bool,
+    /// Copy Mode: `svg` (the `copyAsSvg`/`copyAsPdf` flavours) or `raster` (a PNG only).
+    /// SVG is resolution independent, so `copy_raster_scale` never affects it.
+    pub copy_mode: String,
+    /// Copy Mode `raster`: the PNG's pixels per point (1–3).
+    pub copy_raster_scale: u32,
     pub copy_aicb: bool,
     pub aicb_mode: String,
     pub paste_text_formatting: String,
@@ -974,6 +979,8 @@ impl Default for Prefs {
             update_links: s("askWhenModified"),
             copy_as_svg: true,
             copy_as_pdf: false,
+            copy_mode: s("svg"),
+            copy_raster_scale: 1,
             copy_aicb: false,
             aicb_mode: s("preserveAppearance"),
             paste_text_formatting: s("keep"),

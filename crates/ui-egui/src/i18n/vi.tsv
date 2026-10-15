@@ -1569,6 +1569,10 @@
 	Include Metadata	Bao gồm siêu dữ liệu
 	Include non-printing layers	Bao gồm các lớp không in
 	Include SVG Code	Bao gồm mã SVG
+	Copy Mode	Chế độ sao chép
+	PNG (Raster)	PNG (raster)
+	PNG Scale (raster; px per point)	Tỉ lệ PNG (raster; px trên điểm)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Chỉ sao chép PNG: Bao gồm mã SVG, PDF và bảng tạm vector cũ không được áp dụng.
 	Include Swatches for Tints	Bao gồm mẫu màu cho sắc pha
 	Increase Font Size	Tăng cỡ chữ
 	Inflate…	Phình…

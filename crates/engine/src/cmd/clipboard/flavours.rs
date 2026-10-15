@@ -131,7 +131,7 @@ pub fn specs() -> Vec<CommandSpec> {
             "Clipboard Formats",
             [],
             None,
-            "{} → {flavours: [mime…]} what Copy offers other apps for the current clipboard, best first, by the Clipboard Handling preferences: text/plain (a type-only copy's text, else the SVG markup with copyAsSvg), image/svg+xml (copyAsSvg), application/pdf (copyAsPdf), image/png (always; PDF and PNG only for objects with an area); the app publishes them on Copy and Cut",
+            "{} → {flavours: [mime…]} what Copy offers other apps for the current clipboard, best first, by the Clipboard Handling preferences: text/plain (a type-only copy's text, else the SVG markup with copyAsSvg), image/svg+xml (copyAsSvg), application/pdf (copyAsPdf), image/png (always; PDF and PNG only for objects with an area); with copyMode raster, image/png only, rasterized at copyRasterScale pixels per point; the app publishes them on Copy and Cut",
             always,
             flavours
         ),
@@ -235,15 +235,32 @@ impl Session {
         fileio::encode(&doc, "pdf", &json!({ "preserveEditing": false })).map(Some)
     }
 
+    /// The pixels per point Copy Mode rasterizes at (`None` in SVG mode).
+    pub fn copy_png_scale(&self) -> Option<f64> {
+        (self.prefs.copy_mode == "raster").then(|| f64::from(self.prefs.copy_raster_scale.clamp(1, 3)))
+    }
+
+    /// Why Copy Mode's raster is too large to make (`None` when it fits, the clipboard is empty or
+    /// the mode is SVG): the app shows it instead of copying a smaller picture.
+    pub fn clipboard_raster_error(&self) -> Option<String> {
+        let scale = self.copy_png_scale()?;
+        let b = self.clipboard.bounds().filter(|b| b.width() > 0.0 && b.height() > 0.0)?;
+        vectorcraft_render::raster_size(b, scale).err()
+    }
+
     /// The MIME types of [`Self::clipboard_flavours`], without making them.
     pub fn clipboard_flavour_types(&self) -> Vec<&'static str> {
         if self.clipboard.is_empty() {
             return vec![];
         }
-        let (svg, pdf) = (self.prefs.copy_as_svg, self.prefs.copy_as_pdf);
-        let text = svg || self.clipboard.nodes.iter().all(type_only);
         // Art without an area (a lone guide-like line) has no page or picture.
         let area = self.clipboard.bounds().is_some_and(|b| b.width() > 0.0 && b.height() > 0.0);
+        // Copy Mode raster: the PNG only.
+        if self.copy_png_scale().is_some() {
+            return if area { vec![PNG] } else { vec![] };
+        }
+        let (svg, pdf) = (self.prefs.copy_as_svg, self.prefs.copy_as_pdf);
+        let text = svg || self.clipboard.nodes.iter().all(type_only);
         [(TEXT, text), (SVG, svg), (PDF, pdf && area), (PNG, area)].into_iter().filter_map(|(m, on)| on.then_some(m)).collect()
     }
 
@@ -260,8 +277,10 @@ impl Session {
                 SVG => svg.clone().map(String::into_bytes),
                 PDF => self.clipboard_pdf().inspect_err(|e| log::warn!("clipboard PDF: {e}")).ok().flatten(),
                 _ => {
-                    let side = self.clipboard.bounds().map_or(1.0, |b| b.width().max(b.height()));
-                    let scale = (COPY_PNG_SIDE / side).clamp(0.01, 1.0);
+                    let scale = self.copy_png_scale().unwrap_or_else(|| {
+                        let side = self.clipboard.bounds().map_or(1.0, |b| b.width().max(b.height()));
+                        (COPY_PNG_SIDE / side).clamp(0.01, 1.0)
+                    });
                     self.clipboard_png(scale).inspect_err(|e| log::warn!("clipboard PNG: {e}")).ok().flatten().map(|(png, ..)| png)
                 }
             };

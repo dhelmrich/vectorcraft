@@ -1335,6 +1335,10 @@
 	Include Metadata	Включати метадані
 	Include non-printing layers	Включати недруковані шари
 	Include SVG Code	Вмикати код SVG
+	Copy Mode	Режим копіювання
+	PNG (Raster)	PNG (растр)
+	PNG Scale (raster; px per point)	Масштаб PNG (растр; px на пункт)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Копіюється лише PNG: «Вмикати код SVG», PDF і старий векторний буфер обміну не застосовуються.
 	Include Swatches for Tints	Включати зразки для відтінків
 	Inflate…	Надування…
 	Info	Інформація

@@ -1706,6 +1706,10 @@
 	Include Metadata	Metaadatok hozzáadása
 	Include non-printing layers	Nem nyomtatandó rétegek hozzáadása
 	Include SVG Code	SVG-kód hozzáadása
+	Copy Mode	Másolási mód
+	PNG (Raster)	PNG (raszter)
+	PNG Scale (raster; px per point)	PNG méretarány (raszter; px/pont)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Csak a PNG-t másolja: az SVG-kód hozzáadása, a PDF és a régi vektoros vágólap nem érvényes.
 	Include Swatches for Tints	Tónusok színmintáinak felvétele
 	Include tagged source profiles	Címkézett forrásprofilok beágyazása
 	Increase Font Size	Betűméret növelése

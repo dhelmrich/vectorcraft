@@ -1317,6 +1317,14 @@
 	Include Metadata	包含中繼資料
 	Include non-printing layers	包含不列印的圖層
 	Include SVG Code	包含 SVG 程式碼
+	Copy Mode	複製模式
+	SVG	SVG
+	PNG 1×	PNG 1×
+	PNG 2×	PNG 2×
+	PNG 3×	PNG 3×
+	PNG (Raster)	PNG（點陣）
+	PNG Scale (raster; px per point)	PNG 縮放（點陣；像素/點）
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	僅複製 PNG：包含 SVG 程式碼、PDF 與舊版向量剪貼簿不適用。
 	Include Swatches for Tints	包含色調的色票
 	Inflate…	膨脹…
 	Info	資訊

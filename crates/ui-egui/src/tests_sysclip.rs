@@ -124,6 +124,31 @@ fn copy_publishes_pdf_to_the_service_only_with_the_preference_on() {
 }
 
 #[test]
+fn copy_mode_raster_publishes_one_png_at_the_mode_scale() {
+    let (mut app, board) = app();
+    let id = run(&mut app, "shape.rectangle", json!({"x": 10, "y": 10, "width": 40, "height": 20}))["id"].clone();
+    run(&mut app, "paint.setStroke", json!({"none": true}));
+    run(&mut app, "select.set", json!({"ids": [id]}));
+    run(&mut app, "prefs.set", json!({"values": {"copyMode": "raster", "copyRasterScale": 2}}));
+    run(&mut app, "edit.copy", json!({}));
+    assert_eq!(written(&board), [PNG], "the full PNG, nothing else");
+    let img = image::load_from_memory(&board.borrow().flavours[0].data).unwrap().to_rgba8();
+    assert_eq!(img.dimensions(), (80, 40), "40 × 20 pt at 2x");
+}
+
+#[test]
+fn an_over_large_copy_mode_raster_opens_a_message_instead_of_copying() {
+    let (mut app, board) = app();
+    let id = run(&mut app, "shape.rectangle", json!({"x": 0, "y": 0, "width": 20000, "height": 20000}))["id"].clone();
+    run(&mut app, "select.set", json!({"ids": [id]}));
+    run(&mut app, "prefs.set", json!({"values": {"copyMode": "raster", "copyRasterScale": 3}}));
+    run(&mut app, "edit.copy", json!({}));
+    let d = app.ui.dialog.clone().expect("a message telling the user the PNG is too large");
+    assert_eq!(d.kind, crate::dialogs::confirm::MESSAGE);
+    assert!(written(&board).is_empty(), "nothing was copied smaller");
+}
+
+#[test]
 fn our_own_copy_pastes_the_lossless_internal_clipboard() {
     let (mut app, board) = app();
     copy_rect(&mut app);

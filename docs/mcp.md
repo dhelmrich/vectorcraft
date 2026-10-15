@@ -2232,7 +2232,8 @@ Besides SVG, Copy offers other apps PNG and PDF of the copied objects, and their
 `clipboard.flavours` lists what Copy offers for the current clipboard, best first, by the Clipboard Handling
 preferences: `text/plain` (the text of a type-only copy, else the SVG markup with `copyAsSvg`), `image/svg+xml`
 (`copyAsSvg`), `application/pdf` (`copyAsPdf`) and `image/png` (always; PDF and PNG need objects with an
-area). Each one has a query command:
+area). With `copyMode: "raster"`, Copy offers the PNG only, rasterized at `copyRasterScale` pixels per point
+(1–3); SVG is resolution independent, so that scale never affects it. Each one has a query command:
 `clipboard.exportSvg`, `clipboard.exportText` (null unless every copied object is type), `clipboard.exportPdf`
 (a one-page PDF, the page the objects' visual bounds) and `clipboard.exportPng {scale?}` (cropped to the objects,
 transparent around them).

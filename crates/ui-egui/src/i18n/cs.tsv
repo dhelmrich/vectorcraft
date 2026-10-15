@@ -3172,6 +3172,10 @@ theme	Appearance	Motiv
 	Hollow	Duté
 	Identify Objects By	Identifikovat objekty podle
 	Include SVG Code	Zahrnout kód SVG
+	Copy Mode	Režim kopírování
+	PNG (Raster)	PNG (rastr)
+	PNG Scale (raster; px per point)	Měřítko PNG (rastr; px na bod)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Kopíruje pouze PNG: Zahrnout kód SVG, PDF a starší vektorovou schránku nelze použít.
 	Italian	Italština
 	Keyboard Increment	Krok klávesnice
 	Language Options	Možnosti jazyka

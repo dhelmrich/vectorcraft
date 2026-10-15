@@ -1324,6 +1324,10 @@
 	Include Metadata	Metadaten einschließen
 	Include non-printing layers	Nicht druckende Ebenen einschließen
 	Include SVG Code	SVG-Code einschließen
+	Copy Mode	Kopiermodus
+	PNG (Raster)	PNG (Raster)
+	PNG Scale (raster; px per point)	PNG-Skalierung (Raster; px pro Punkt)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Kopiert nur das PNG: SVG-Code einschließen, PDF und die alte Vektor-Zwischenablage gelten nicht.
 	Include Swatches for Tints	Farbfelder für Tonwerte einschließen
 	Inflate…	Aufblasen…
 	Info	Info

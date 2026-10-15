@@ -1152,6 +1152,9 @@
 	Include Linked Files	Incluir Arquivos Vinculados
 	Include Metadata	Incluir Metadados
 	Include SVG Code	Incluir Código SVG
+	Copy Mode	Modo de cópia
+	PNG Scale (raster; px per point)	Escala do PNG (raster; px por ponto)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Copia apenas o PNG: Incluir Código SVG, PDF e a área de transferência vetorial legada não se aplicam.
 	Include Swatches for Tints	Incluir Amostras para Tons
 	Include non-printing layers	Incluir camadas de não impressão
 	Inflate…	Inflar…

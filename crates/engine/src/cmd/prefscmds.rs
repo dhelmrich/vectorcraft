@@ -91,6 +91,8 @@ pub const GPU_PREFERENCES: &[(&str, &str)] =
 /// `x11` opens the window through XWayland on a Wayland session, where dropped files arrive
 /// (winit 0.30 has no Wayland drag and drop, #1151).
 const LINUX_DISPLAY_SERVERS: &[(&str, &str)] = &[("automatic", "Automatic"), ("x11", "X11 (XWayland)")];
+/// Clipboard Handling › On Copy › Copy Mode (`copyMode`).
+const COPY_MODES: &[(&str, &str)] = &[("svg", "SVG"), ("raster", "PNG (Raster)")];
 const BLACK: &[(&str, &str)] = &[("accurate", "Display All Blacks Accurately"), ("rich", "Display All Blacks as Rich Black")];
 const BLACK_OUT: &[(&str, &str)] = &[("accurate", "Output All Blacks Accurately"), ("rich", "Output All Blacks as Rich Black")];
 
@@ -315,6 +317,8 @@ pub const PREF_SPECS: &[PrefSpec] = &[
     // Clipboard Handling
     p!("copyAsSvg", "Clipboard Handling", "On Copy", "Include SVG Code", bool),
     p!("copyAsPdf", "Clipboard Handling", "On Copy", "PDF", bool),
+    p!("copyMode", "Clipboard Handling", "On Copy", "Copy Mode", choice(COPY_MODES)),
+    p!("copyRasterScale", "Clipboard Handling", "On Copy", "PNG Scale (raster; px per point)", int(1, 3)),
     p!("copyAicb", "Clipboard Handling", "On Copy", "Legacy vector clipboard (no transparency)", bool),
     p!(
         "aicbMode",

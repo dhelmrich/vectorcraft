@@ -3040,6 +3040,10 @@ theme	Appearance	Wygląd
 	Hollow	Puste
 	Identify Objects By	Identyfikuj obiekty według
 	Include SVG Code	Dołącz kod SVG
+	Copy Mode	Tryb kopiowania
+	PNG (Raster)	PNG (rastr)
+	PNG Scale (raster; px per point)	Skala PNG (rastr; px na punkt)
+	Copies the PNG only: Include SVG Code, PDF and the legacy vector clipboard don't apply.	Kopiuje tylko PNG: Dołącz kod SVG, PDF i starszy schowek wektorowy nie mają zastosowania.
 	Italian	Włoski
 	Keyboard Increment	Przyrost klawiatury
 	Language Options	Opcje języka
