@@ -23,6 +23,11 @@ coding**. Please read the following before using anything here.
   the source is presently public**. If, for legal reasons, the person responsible for the original
   upload has to remove it, **this repository will be removed automatically as well.** It is a mirror
   of that work and has no independent life once the original is withdrawn.
+- **Claims are the original project's.** Descriptions of VectorCraft below come from its own
+  documentation and code — including its characterisation of itself as a "clean-room" reimplementation
+  of Adobe Illustrator — and are reported here **with reservations**, as claims, not as facts this
+  repository has verified or endorses. Read the upstream repository itself before relying on any of
+  them.
 - **Not affiliated.** This fork is not affiliated with, endorsed by, or maintained in cooperation
   with the original authors or the ArtCraft project. Names, logos and trademarks belong to their
   owners.
@@ -34,15 +39,20 @@ contact its owner) and it will be deleted.
 
 ## What is VectorCraft?
 
-VectorCraft is an open-source, clean-room reimplementation of the Adobe Illustrator workflow,
-written in pure Rust, running natively on macOS, Windows, Linux and FreeBSD and in the browser via
-WebAssembly. It is developed upstream at
-[storytold/vectorcraft](https://github.com/storytold/vectorcraft); its own documentation, roadmap,
+VectorCraft is an open-source vector illustration application written in Rust. It runs natively on
+macOS, Windows, Linux and FreeBSD and in the browser via WebAssembly, and is developed upstream at
+[storytold/vectorcraft](https://github.com/storytold/vectorcraft) — its documentation, roadmap,
 issues and community live there. **This repository only mirrors it for study.**
 
-Upstream is licensed **MIT OR Apache-2.0** (see [`LICENSE-MIT`](LICENSE-MIT),
-[`LICENSE-APACHE`](LICENSE-APACHE) and [`NOTICE`](NOTICE)); those licences and attributions carry
-over unchanged to this copy.
+**Read with grains of salt.** The original project describes itself as a "clean-room" reimplementation
+of the Adobe Illustrator workflow, free of Adobe assets and measured for parity against Adobe's
+documentation. Those are the upstream project's own claims about its own work; this repository
+neither verifies nor endorses them, and nothing here should be read as confirming them. What can be
+checked directly is the code and its tests, which are public in the upstream repository.
+
+The upstream repository states a licence of **MIT OR Apache-2.0**
+([`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE), [`NOTICE`](NOTICE)); those files
+carry over unchanged in this copy.
 
 ## Local change studied here: "Copy Mode"
 
@@ -95,11 +105,14 @@ The Edit menu's Copy Mode radio group:
 
 ## Licence and credits
 
-All original code, artwork and documentation are the work of the **VectorCraft contributors** and
-the **ArtCraft team**, licensed **MIT OR Apache-2.0**. See [`LICENSE-MIT`](LICENSE-MIT),
-[`LICENSE-APACHE`](LICENSE-APACHE), [`NOTICE`](NOTICE) and [`ASSETS.md`](ASSETS.md). The ArtCraft
-name, wordmark and logos in `docs/brand/` are trademarks and are **not** open source
-([`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)).
+The code, artwork and documentation here are the work of the upstream project's contributors and the
+ArtCraft team; its repository states a licence of **MIT OR Apache-2.0**
+([`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE), [`NOTICE`](NOTICE),
+[`ASSETS.md`](ASSETS.md)), and states that the ArtCraft name, wordmark and logos in `docs/brand/`
+are trademarks and not open source
+([`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)). Those files and statements carry
+over unchanged in this copy.
 
-This fork adds the documentation you are reading and, where screenshots are provided, captures of
-the running application for the study. No rights beyond those of the upstream project are claimed.
+This fork adds only the documentation you are reading, the Copy Mode patch described above, and —
+where screenshots are provided — captures of the running application for the study. No rights beyond
+those the upstream project grants are claimed.
