@@ -323,6 +323,9 @@ Generated-in-code art is original and has no file to list. This covers the defau
 | `docs/images/shot-3-sheet.png` | VectorCraft contributors | Screenshot of VectorCraft itself, editing `examples/feature-sheet.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/shot-4-bezier.png` | VectorCraft contributors | Screenshot of VectorCraft itself, editing `examples/feature-sheet.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/shot-5-perspective.png` | VectorCraft contributors | Screenshot of VectorCraft itself, editing `examples/perspective-city.vectorcraft` | MIT OR Apache-2.0 |  |
+| `docs/images/copy-mode-raster.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Preferences ▸ Clipboard Handling with Copy Mode set to PNG (Raster) | MIT OR Apache-2.0 | README only; not shipped in the app |
+| `docs/images/copy-mode-svg.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Preferences ▸ Clipboard Handling with Copy Mode set to SVG | MIT OR Apache-2.0 | README only; not shipped in the app |
+| `docs/images/copy-mode-menu.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Edit ▸ Copy Mode | MIT OR Apache-2.0 | README only; not shipped in the app |
 | `docs/images/art-neon-drive.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/neon-drive.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/art-ribbons.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/ribbons.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/art-pathfinder.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/feature-sheet.vectorcraft` (artboard 1) | MIT OR Apache-2.0 |  |
