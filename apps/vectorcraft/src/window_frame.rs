@@ -8,6 +8,13 @@
 //! same in storytold/photocraft#2401). [`service`] strips the two styles and has Windows
 //! recalculate the frame; winit puts them back whenever it changes the window flags (maximize,
 //! restore, …), so the returned guard runs every frame.
+//!
+//! Maximizing needs a second fix: while maximized, winit clamps the client rect to the taskbar's
+//! work area (`WM_NCCALCSIZE`), but Windows itself maximizes the caption-less window to the whole
+//! monitor plus its resize-border overhang. The band between the two is non-client area nothing
+//! paints into, where a caption winit gave back gets drawn and then sticks as a stale composition
+//! — at the top of the screen when the taskbar is there, above the app bar. The guard puts the
+//! window rect where the client already is while maximized, so there is no band to draw in.
 
 /// Run once per frame; a no-op once the window is borderless.
 pub type WindowFrameFn = Box<dyn FnMut()>;
@@ -30,8 +37,8 @@ mod platform {
             _ => return None,
         };
         let hwnd = find_window(target)?;
-        strip(&hwnd);
-        Some(Box::new(move || strip(&hwnd)))
+        strip_and_align(&hwnd);
+        Some(Box::new(move || strip_and_align(&hwnd)))
     }
 
     /// The top-level window with the given raw handle: `EnumWindows` hands out real `HWND`s, so
@@ -49,21 +56,41 @@ mod platform {
         found
     }
 
-    /// Removes `WS_CAPTION` (which includes `WS_BORDER`) and has Windows recalculate the frame;
-    /// the sizing border stays, so edge resizing and snapping keep working.
-    fn strip(hwnd: &HWND) {
+    /// Strips `WS_CAPTION | WS_BORDER` and, while maximized, puts the window rect where the
+    /// client already is (the work area). Both in one atomic `SetWindowPos` so winit can't
+    /// re-add the caption between the two operations.
+    fn strip_and_align(hwnd: &HWND) {
         let style = hwnd.style();
         let without = style & !(co::WS::CAPTION | co::WS::BORDER);
-        if without.raw() == style.raw() {
+        let style_changed = without.raw() != style.raw();
+
+        // While maximized, the outer rect should match the work area; otherwise keep the current rect.
+        let (pos, size, needs_move) = if hwnd.IsZoomed() {
+            let Ok(work) = hwnd.MonitorFromWindow(co::MONITOR::DEFAULTTONEAREST).GetMonitorInfo().map(|m| m.rcWork) else {
+                return;
+            };
+            let pos = POINT::with(work.left, work.top);
+            let size = SIZE::with(work.right - work.left, work.bottom - work.top);
+            let Ok(outer) = hwnd.GetWindowRect() else { return };
+            (pos, size, outer != work)
+        } else {
+            (POINT::new(), SIZE::new(), false)
+        };
+
+        if !style_changed && !needs_move {
             return;
         }
+
+        let mut flags = co::SWP::NOZORDER | co::SWP::NOACTIVATE;
+        if !needs_move {
+            flags |= co::SWP::NOMOVE | co::SWP::NOSIZE;
+        }
+        if style_changed {
+            flags |= co::SWP::FRAMECHANGED;
+        }
+
         hwnd.set_style(without);
-        let _ = hwnd.SetWindowPos(
-            HwndPlace::None,
-            POINT::new(),
-            SIZE::new(),
-            co::SWP::FRAMECHANGED | co::SWP::NOMOVE | co::SWP::NOSIZE | co::SWP::NOZORDER | co::SWP::NOACTIVATE,
-        );
+        let _ = hwnd.SetWindowPos(HwndPlace::None, pos, size, flags);
     }
 }
 
