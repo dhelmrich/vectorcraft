@@ -117,6 +117,7 @@ Generated-in-code art is original and has no file to list. This covers the defau
 | `assets/icons/dc-cube.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-dash-align.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-dash-exact.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
+| `assets/icons/dc-dimension.svg` | Osama Amin | Original work, drawn for VectorCraft: a dimension line with arrowheads between two extension lines | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-dir-off.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-dir-on.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-direct.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
@@ -133,6 +134,7 @@ Generated-in-code art is original and has no file to list. This covers the defau
 | `assets/icons/dc-draw-normal.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-ellipse.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-fill-none.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
+| `assets/icons/dc-filter.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-flare.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-folder.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
 | `assets/icons/dc-free-transform.svg` | VectorCraft contributors | Original work, drawn for VectorCraft | MIT OR Apache-2.0 |  |
@@ -326,6 +328,11 @@ Generated-in-code art is original and has no file to list. This covers the defau
 | `docs/images/copy-mode-raster.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Preferences ▸ Clipboard Handling with Copy Mode set to PNG (Raster) | MIT OR Apache-2.0 | README only; not shipped in the app |
 | `docs/images/copy-mode-svg.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Preferences ▸ Clipboard Handling with Copy Mode set to SVG | MIT OR Apache-2.0 | README only; not shipped in the app |
 | `docs/images/copy-mode-menu.png` | This fork's maintainer | Screenshot of VectorCraft itself (this fork), Edit ▸ Copy Mode | MIT OR Apache-2.0 | README only; not shipped in the app |
+| `docs/images/shot-6-revolve.png` | VectorCraft contributors | Screenshot of VectorCraft itself, editing `examples/still-life.vectorcraft` | MIT OR Apache-2.0 |  |
+| `docs/images/shot-7-dimensions.png` | VectorCraft contributors | Screenshot of VectorCraft itself, editing `examples/bracket-drawing.vectorcraft` | MIT OR Apache-2.0 |  |
+| `docs/images/art-still-life.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/still-life.vectorcraft` | MIT OR Apache-2.0 |  |
+| `examples/still-life.vectorcraft` | VectorCraft contributors | Original artwork built through the VectorCraft command API | MIT OR Apache-2.0 |  |
+| `examples/bracket-drawing.vectorcraft` | VectorCraft contributors | Original drawing built through the VectorCraft command API | MIT OR Apache-2.0 |  |
 | `docs/images/art-neon-drive.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/neon-drive.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/art-ribbons.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/ribbons.vectorcraft` | MIT OR Apache-2.0 |  |
 | `docs/images/art-pathfinder.png` | VectorCraft contributors | Rendered by VectorCraft from `examples/feature-sheet.vectorcraft` (artboard 1) | MIT OR Apache-2.0 |  |
